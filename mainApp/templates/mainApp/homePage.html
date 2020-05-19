@@ -1,0 +1,48 @@
+{% extends "mainApp/wrapper.html"%}
+{% block content %}
+<div class="container-fluid  oflow" >
+  <div class="row">
+
+
+{% if not book %}
+<h2>Книги по запросу не найдены</h2>
+{% endif%}
+{% for val in book %}
+<div >
+  <h1></h1>
+</div>
+<div  style="background-color:#cccccc">
+
+
+<div class="col-xs-12 col-sm-12 col-md-12 " >
+
+    <a href="{% url 'mainApp:book_detail' val.name_book val.id %}" style = "color:#000000"><h2>
+
+      {{val.name_book}}
+      </h2>
+    </a>
+
+</div>
+<div class="col-xs-12 col-sm-6 col-md-3" >
+  {% if val.image_book %}
+    <img src="../../{{val.image_book.url}}" class="img-fluid" width="240" height="343" align="left">
+{% else %}
+  <img src="/static/book-question-mark-computer-icons-clip-art-earth-globe.jpg" class="img-fluid" width="240" height="343" align="left">
+{% endif %}
+ </div>
+ <div class="col-xs-12 col-sm-8 col-md-12 " >
+ <p>{{val.annotation}}</p>
+ <h5>Авторы:</h5>
+ {% for auth in val.authors.all %}
+ <p>{{auth.name_author}}</p>
+ {% endfor %}
+ <h5>Жанры:</h5>
+ <p>
+ {% for gen in val.genres_book.all %}
+ {{gen.name_genre}},
+ {% endfor %}
+ </p>
+ </div>
+ </div>
+{% endfor %}
+{% endblock %}

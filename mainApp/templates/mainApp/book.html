@@ -1,0 +1,107 @@
+{% extends "mainApp/wrapper.html"%}
+{% block content %}
+<div class="container-fluid  oflow" >
+  <div class="row">
+<div >
+  <h1></h1>
+</div>
+<div  style="background-color:#cccccc">
+<div class="col-xs-12 col-sm-12 col-md-12 " >
+
+    <a href="{% url 'mainApp:book_detail' book.name_book book.id %}" style = "color:#000000"><h2>
+
+      {{book.name_book}}
+      </h2>
+    </a>
+
+</div>
+<div class="col-xs-12 col-sm-6 col-md-3" >
+  {% if book.image_book %}
+    <img src="../{{book.image_book.url}}" class="img-fluid" width="240" height="343" align="left">
+{% else %}
+  <img src="/static/book-question-mark-computer-icons-clip-art-earth-globe.jpg" class="img-fluid" width="240" height="343" align="left">
+{% endif %}
+
+ </div>
+ <div class="col-xs-12 col-sm-8 col-md-12 " >
+ <p>{{book.annotation}}</p>
+ <h5>Авторы:</h5>
+ {% for auth in book.authors.all %}
+ <p>{{auth.name_author}}</p>
+ {% endfor %}
+
+ <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Главы
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    {% for chp in chapter %}
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#a{{chp.id}}">
+  {{chp.name_chapter}}
+    </button>
+    {% endfor %}
+  </div>
+</div>
+
+<h5>Другие книги из серии: {{series.name_series}}</h5>
+
+<p>
+{% for another in another_book_in_series %}
+<div class="container-fluid  oflow">
+  <a href="{% url 'mainApp:book_detail' another.name_book another.id %}" style = "color:#000000">{{another.name_book}}</a>
+  </div>
+{% endfor %}
+
+ </div>
+ </div>
+ <h3>Комментарии:</h3>
+ {% for com in comment %}
+ <div class="container-fluid  oflow">
+
+     <div class="media">
+     <div class="media-body">
+       <h5 class="mt-0">{{com.author_name}}:</h5>
+         <p>{{com.comment_text}}</p>
+     </div>
+   </div>
+   </div>
+ {% endfor %}
+ <hr>
+ <h1></h1>
+ <form action="{% url 'mainApp:leave_comment' book.name_book book.id %}" method="POST" >
+   {% csrf_token %}
+
+   <div class="form-group">
+       <label for="exampleFormControlInput1">Ник</label>
+       <input type="text" class="form-control" id="exampleFormControlInput1" placeholder = "Ваше имя" name="name">
+     </div>
+
+     <div class="form-group">
+         <label for="exampleFormControlTextarea1">Текст комментария</label>
+         <textarea  class="form-control" name="text" required placeholder = "Текст комментария" id="exampleFormControlTextarea1" rows="3"></textarea>
+       </div>
+       <button type="submit" class="btn btn-outline-primary">Отправить</button>
+
+ </form>
+ {% for chp in chapter %}
+ <div class="modal fade" id="a{{chp.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal-dialog modal-lg " role="document">
+ <div class="modal-content">
+   <div class="modal-header">
+     <h5 class="modal-title" id="{{chp.id}}">{{chp.name_chapter}}</h5>
+     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+   <div class="modal-body">
+     <p>{{chp.chapter_text}}</p>
+
+   </div>
+   <div class="modal-footer">
+     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+   </div>
+ </div>
+</div>
+</div>
+{% endfor %}
+{% endblock %}

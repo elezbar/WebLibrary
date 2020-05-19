@@ -1,0 +1,12 @@
+{% extends "mainApp/wrapper.html"%}
+{% block content %}
+
+  {% for genr in genres %}
+    <a href="{% url 'mainApp:genre_detail' genr.name_genre genr.id %}" style = "color:#000000">
+      <h2>
+        {{genr.name_genre}}
+      </h2>
+    </a>
+  {% endfor %}
+
+{% endblock %}
